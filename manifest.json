@@ -3,7 +3,7 @@
   
   "name": "DOTLAN ESI Radar",
   "version": "0.2",
-  "description": "This extention re-implements the old 'radar' (location tracking) feature into DOTLAN using EVE's new ESI API.",
+  "description": "This extension reimplements the old 'radar' (location tracking) feature into DOTLAN using EVE's new ESI API.",
   
   "icons": {
     "16": "images/icon16.png",
