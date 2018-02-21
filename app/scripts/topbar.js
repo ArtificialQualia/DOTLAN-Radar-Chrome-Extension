@@ -55,20 +55,51 @@ var ESI_scope="scope=esi-location.read_location.v1%20esi-ui.write_waypoint.v1"
 var ESI_query_string="?"+ESI_response_type+"&"+ESI_redirect_uri+"&"+ESI_client_id+"&"+ESI_scope
 var ESI_login_url="https://login.eveonline.com/oauth/authorize"
 
-var topbar = new Vue({
+var reactiveData = {
+    radarIconURL: 'x',
+    characterPortrait: '',
+    characterName: 'No character logged in',
+    characterLocation: ''
+}
+
+var vm = new Vue({
+  data: reactiveData,
   render (createElement) {
-    return createElement('div', [
-      'some shit about your character ',
-      createElement('a', {
+    return createElement('div', {
+      attrs: { 
+        id: 'radarTopbarContainer' 
+      }
+    }, [
+      createElement('div', {
         attrs: {
-          href: ESI_login_url+ESI_query_string
+          id: 'radarTopbar'
         }
-      }, 'sign on')
+      }, [
+        createElement('img', {
+          attrs: {
+            src: chrome.runtime.getURL('images/icon16.png'),
+            id: 'radarIcon'
+          }
+        }),
+        createElement('img', {
+          attrs: {
+            src: reactiveData.characterPortrait,
+            id: 'characterPortrait'
+          }
+        }),
+        createElement('span', ' '+reactiveData.characterName+' '),
+        createElement('a', {
+          attrs: {
+            href: ESI_login_url+ESI_query_string,
+            id: 'radarSignIn'
+          }
+        }, 'Sign in')
+      ])
     ])
   }
 }).$mount();
 
-document.body.appendChild(topbar.$el);
+document.body.appendChild(vm.$el);
 
 var token = null;
 var systemName = null;

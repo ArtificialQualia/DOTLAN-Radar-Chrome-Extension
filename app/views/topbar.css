@@ -1,19 +1,50 @@
-#radarTopbar {
-    position: absolute;
-    z-index: 101;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: #fde073;
-    text-align: center;
-    line-height: 2.5;
-    overflow: hidden; 
-    -webkit-box-shadow: 0 0 5px black;
-    -moz-box-shadow:    0 0 5px black;
-    box-shadow:         0 0 5px black;
+#radarTopbarContainer {
+	position: fixed;
+	z-index: 101;
+  top: 0px;
+  height: 30px;
+  width: 100%;
+  animation: slideIn 1s ease-out 0.5s 1 forwards;
 }
 
-@-webkit-keyframes radarSlideDown {
-    0%, 100% { -webkit-transform: translateY(-50px); }
-    10%, 90% { -webkit-transform: translateY(0px); }
+#radarTopbar {
+  margin: 0 auto;
+  width: 600px;
+  border-radius: 0px 0px 25px 25px;
+  background: #D5DF3D;
+  padding: 2px 15px 4px 10px;
+  height: 17px;
+  box-shadow: 0 0 5px black;
+}
+
+#radarTopbarContainer:hover {
+	animation: slideOut 0.1s ease-out 0s 1 forwards;
+}
+
+@keyframes slideIn {
+  0% {top: 0px;}
+  100% {top: -20px;}
+}
+
+@keyframes slideOut {
+  0% {top: -20px;}
+  100% {top: 0px;}
+}
+
+#radarIcon {
+	vertical-align: middle;
+}
+
+#radarSignIn {
+	font-weight: bold;
+	float: right;
+	color: #8F8B2C;
+}
+
+#radarSignIn:hover {
+  color: #666;
+}
+
+#radarSignIn:active {
+  color: #444;
 }

@@ -12,6 +12,8 @@
     "128": "images/icon128.png"
   },
   
+  "web_accessible_resources": ["images/icon16.png"],
+  
   "content_scripts": [
     {
       "matches": ["*://evemaps.dotlan.net/*"],
