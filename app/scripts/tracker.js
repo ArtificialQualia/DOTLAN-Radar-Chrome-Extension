@@ -170,8 +170,7 @@ function AttemptRefreshToken(tokenArg) {
   })
   .catch( (error) => {
     console.log(error);
-    RevokeToken();
-    throw error;
+    return RevokeToken();
   })
 }
 
@@ -184,6 +183,9 @@ function RevokeToken() {
     },
     data: 'token_type_hint=access_token&token='+token
   })
+  .catch( (error) => {
+    console.log(error);
+  })
   .then( (response) => {
     token = null;
     chrome.storage.local.set({radarToken: token});
@@ -195,6 +197,9 @@ function RevokeToken() {
       Authorization: atob("QmFzaWMgTVRRNE1qY3lNRFprWkRCbE5HTTFaRGd3TmpCa016Vmxaall6WWpsbFpXTTZhekU0YmtKNU5uVmhhMHB5UjB0dlIxaENVRkoxY2paak4yNUlUMUp4TkdFelpVNTRZalZ0T0E9PQ==")
     },
     data: 'token_type_hint=refresh_token&token=='+refreshToken
+  })
+  .catch( (error) => {
+    console.log(error);
   })
   .then( (response) => {
     refreshToken = null;
@@ -270,28 +275,19 @@ const localGet_Promise = key => new Promise(resolve => chrome.storage.local.get(
 
 ExtractAuthCode(location.href)
 .then( () => {
-  return localGet_Promise('radarRefreshToken');
+  return syncData();
 })
-.then( (items) => {
-  refreshToken = (typeof items['radarRefreshToken'] == 'undefined') ? null : items['radarRefreshToken'];
+.then( () => {
   if (refreshToken != null) {
     reactiveData.signInText = 'Sign Out';
     reactiveData.signInOnClick = RevokeToken;
     reactiveData.signInLink = 'javascript:;';
   }
-  return localGet_Promise('radarToken');
-})
-.then( (items) => {
-  token = (typeof items['radarToken'] == 'undefined') ? null : items['radarToken'];
   if (token == null && refreshToken != null) {
     return AttemptRefreshToken(refreshToken);
   }
 })
 .then( () => {
-  return localGet_Promise('radarTrackingEnabled');
-})
-.then( (items) => {
-  radarTrackingEnabled = (typeof items['radarTrackingEnabled'] == 'undefined') ? true : items['radarTrackingEnabled'];
   if(token != null && radarTrackingEnabled == true) {
     return GetCharacterID();
   }
