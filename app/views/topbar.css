@@ -11,14 +11,14 @@
   margin: 0 auto;
   width: 600px;
   border-radius: 0px 0px 25px 25px;
+  padding: 1px 15px 5px 10px;
   background: #D5DF3D;
-  padding: 2px 15px 4px 10px;
   height: 17px;
   box-shadow: 0 0 5px black;
 }
 
 #radarTopbarContainer:hover {
-	animation: slideOut 0.1s ease-out 0s 1 forwards;
+	animation: none;
 }
 
 @keyframes slideIn {
@@ -26,18 +26,21 @@
   100% {top: -20px;}
 }
 
-@keyframes slideOut {
-  0% {top: -20px;}
-  100% {top: 0px;}
+#radarTable {
+	width: 100%;
 }
 
 #radarIcon {
+	vertical-align: middle;
+	padding: 0px 5px 0px 0px;
+}
+
+#characterPortrait {
 	vertical-align: middle;
 }
 
 #radarSignIn {
 	font-weight: bold;
-	float: right;
 	color: #8F8B2C;
 }
 
@@ -47,4 +50,19 @@
 
 #radarSignIn:active {
   color: #444;
+}
+
+#radarColumnLeft {
+  text-align: left;
+  width: auto;
+}
+
+#radarColumnCenter {
+  text-align: center;
+  width: 20%;
+}
+
+#radarColumnRight {
+	text-align: right;
+	width: auto;
 }

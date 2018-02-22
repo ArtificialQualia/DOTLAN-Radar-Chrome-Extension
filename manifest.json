@@ -21,7 +21,8 @@
       "js": [
         "app/scripts/libraries/vue.runtime.min.js", 
         "app/scripts/libraries/axios.min.js",
-        "app/scripts/topbar.js"
+        "app/scripts/topbar.js",
+        "app/scripts/tracker.js"
       ]
     }
   ],
