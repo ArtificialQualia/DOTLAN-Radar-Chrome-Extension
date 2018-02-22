@@ -1,4 +1,4 @@
-# DOTLAN-Radar-Chrome-Extension ![icon](https://github.com/ArtificialQualia/PyEveLiveDPS/raw/master/images/icon32.png)
+# DOTLAN-Radar-Chrome-Extension ![icon](https://github.com/ArtificialQualia/DOTLAN-Radar-Chrome-Extension/raw/master/images/icon32.png)
 
 This is an extension for Chrome to re-add the old 'radar' (location tracking) feature into DOTLAN using EVE's new ESI API.
 
