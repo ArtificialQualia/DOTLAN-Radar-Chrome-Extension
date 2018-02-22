@@ -7,6 +7,7 @@ var ESI_login_url="https://login.eveonline.com/oauth/authorize"
 
 var reactiveData = {
     topbarContainerAnimation: 'slideIn 1s ease-out 0.5s 1 forwards',
+    topbarContainerAnimationModifier: 'slideIn 1s ease-out 0.5s 1 forwards',
     radarIconURL: 'x',
     characterPortrait: '',
     characterName: 'No character logged in',
@@ -15,7 +16,10 @@ var reactiveData = {
     notifierDisplay: 'none',
     notifierData: '',
     signInText: 'Sign in',
-    signInLink: ESI_login_url+ESI_query_string
+    signInLink: ESI_login_url+ESI_query_string,
+    signInOnClick: '',
+    trackingTriggerText: 'Stop Tracking',
+    trackingTriggerFunction: ''
 }
 
 var vm = new Vue({
@@ -27,6 +31,10 @@ var vm = new Vue({
       },
       style: {
         animation: reactiveData.topbarContainerAnimation
+      },
+      on: {
+        mouseover: () => {reactiveData.topbarContainerAnimation = 'none';},
+        mouseout: () => {reactiveData.topbarContainerAnimation = reactiveData.topbarContainerAnimationModifier;}
       }
     }, [
       createElement('div', {
@@ -59,21 +67,30 @@ var vm = new Vue({
                   height: '16px'
                 }
               }),
-              createElement('span', ' '+reactiveData.characterName+' '),
+              createElement('span', ' '+reactiveData.characterName),
             ]),
             createElement('td', {
               attrs: {
                 id: 'radarColumnCenter'
+              },
+              style: {
+                display: reactiveData.notifierDisplay
               }
             }, [
               createElement('span', {
                 attrs: {
                   id: 'radarNotifier'
-                },
-                style: {
-                  display: reactiveData.notifierDisplay
                 }
               }, ' '+reactiveData.notifierData+' '),
+              createElement('a', {
+                attrs: {
+                  id: 'radarTrackingButton',
+                  href: 'javascript:;'
+                },
+                on: {
+                  click: reactiveData.trackingTriggerFunction
+                }
+              }, reactiveData.trackingTriggerText)
             ]),
             createElement('td', {
               attrs: {
@@ -92,6 +109,9 @@ var vm = new Vue({
                 attrs: {
                   href: reactiveData.signInLink,
                   id: 'radarSignIn'
+                },
+                on: {
+                  click: reactiveData.signInOnClick
                 }
               }, reactiveData.signInText)
             ])

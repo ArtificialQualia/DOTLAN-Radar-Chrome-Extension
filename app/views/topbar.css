@@ -4,21 +4,16 @@
   top: 0px;
   height: 30px;
   width: 100%;
-  animation: slideIn 1s ease-out 0.5s 1 forwards;
 }
 
 #radarTopbar {
   margin: 0 auto;
-  width: 600px;
+  width: 800px;
   border-radius: 0px 0px 25px 25px;
   padding: 1px 15px 5px 10px;
   background: #D5DF3D;
-  height: 17px;
+  height: 18px;
   box-shadow: 0 0 5px black;
-}
-
-#radarTopbarContainer:hover {
-	animation: none;
 }
 
 @keyframes slideIn {
@@ -28,6 +23,7 @@
 
 #radarTable {
 	width: 100%;
+	table-layout: fixed;
 }
 
 #radarIcon {
@@ -52,9 +48,26 @@
   color: #444;
 }
 
+#radarTrackingButton {
+  font-weight: bold;
+  color: #8F8B2C;
+}
+
+#radarTrackingButton:hover {
+  color: #666;
+}
+
+#radarTrackingButton:active {
+  color: #444;
+}
+
 #radarColumnLeft {
   text-align: left;
-  width: auto;
+  width: 40%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 0;
 }
 
 #radarColumnCenter {
@@ -64,5 +77,10 @@
 
 #radarColumnRight {
 	text-align: right;
-	width: auto;
+	width: 40%;
+	white-space: nowrap;
+	overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 0;
+  direction: rtl;
 }
