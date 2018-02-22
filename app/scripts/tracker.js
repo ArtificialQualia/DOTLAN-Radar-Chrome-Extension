@@ -1,4 +1,9 @@
 
+/*
+ * attempts to get character information by verifying our token
+ * if the token is good, the information in the topbar is set
+ * if it's bad, we try to refresh the token (if refresh fails, refreshToken is set to null)
+ */
 function GetCharacterID() {
   return axios({
     method: 'get',
@@ -29,6 +34,15 @@ function GetCharacterID() {
   })
 }
 
+/*
+ * This is the logic that runs once a second.
+ * First we check to see if we should be tracking at all
+ * If another tab starts/stops tracking or logs in/out, the logic at the top will pick that up
+ * 
+ * Then we get the character location from ESI and update if necessary
+ * 
+ * If the calls fail, we try to find a new token, or refresh tokens for a new one
+ */
 function FindCharacter() {
   return syncData()
   .then( () => {
@@ -126,6 +140,9 @@ function FindCharacter() {
   });
 }
 
+/*
+ * This tries to extract the auth code from the URL, this only happens when we get a redirect from the login server
+ */
 function ExtractAuthCode(url) {
   if(url.indexOf('#?code=') > -1) {
     var code = url.split('#?code=')[1];
@@ -153,6 +170,9 @@ function ExtractAuthCode(url) {
   }
 }
 
+/*
+ * This function tries to get a new token, if it fails all tokens that we have are revoked.
+ */
 function AttemptRefreshToken(tokenArg) {
   return axios({
     method: 'post',
@@ -174,6 +194,12 @@ function AttemptRefreshToken(tokenArg) {
   })
 }
 
+/*
+ * Revokes all our current tokens, and sets our token values to null
+ * Even if the revoke fails, we still remove our local tokens
+ * 
+ * We don't wait for the promises to resolve for this function
+ */
 function RevokeToken() {
   axios({
     method: 'post',
@@ -209,6 +235,9 @@ function RevokeToken() {
   SetLogoutStateTopbar();
 }
 
+/*
+ * Resets the reactive data for when a user logs off in any tab
+ */
 function SetLogoutStateTopbar() {
   reactiveData.signInText = 'Sign in';
   reactiveData.signInLink = ESI_login_url+ESI_query_string;
@@ -228,6 +257,9 @@ function SetLogoutStateTopbar() {
   chrome.storage.local.set({radarToken: token});
 }
 
+/*
+ * Toggle for the 'tracking' notification on the top bar
+ */
 function radarTrackingTrigger() {
   if (reactiveData.trackingTriggerText == 'Stop Tracking') {
     reactiveData.trackingTriggerText = 'Start Tracking';
@@ -247,6 +279,9 @@ function radarTrackingTrigger() {
   }
 }
 
+/*
+ * helper function to get the data we have stored in chrome.storage.local for working across tabs and on new pages
+ */
 function syncData() {
   return localGet_Promise('radarTrackingEnabled')
   .then( (items) => {
@@ -269,10 +304,13 @@ var systemName = null;
 var characterLocation = null;
 var characterID = null;
 var characterHeartbeat = null;
+// since the radarTrackingTrigger function wasn't defined when we rendered our HTML, we set it here instead
 reactiveData.trackingTriggerFunction = radarTrackingTrigger
 
+// Promise wrapper for chrome.storage.local.get
 const localGet_Promise = key => new Promise(resolve => chrome.storage.local.get(key, resolve));
 
+// 'main'
 ExtractAuthCode(location.href)
 .then( () => {
   return syncData();
