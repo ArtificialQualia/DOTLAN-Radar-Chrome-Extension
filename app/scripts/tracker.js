@@ -35,6 +35,9 @@ function FindCharacter() {
     if (refreshToken == null && characterID != null) {
       SetLogoutStateTopbar();
     }
+    else if (refreshToken == null && characterID == null) {
+      throw 'tracking stopped';
+    }
     else if (characterID != null) {
       reactiveData.signInText = 'Sign Out';
       reactiveData.signInOnClick = RevokeToken;
@@ -216,6 +219,8 @@ function SetLogoutStateTopbar() {
     radarTrackingTrigger();
   }
   characterID = null;
+  token = null;
+  chrome.storage.local.set({radarToken: token});
 }
 
 function radarTrackingTrigger() {
@@ -244,11 +249,11 @@ function syncData() {
     return localGet_Promise('radarToken');
   })
   .then( (items) => {
-    token = (typeof items['radarToken'] == 'undefined') ? true : items['radarToken'];
+    token = (typeof items['radarToken'] == 'undefined') ? null : items['radarToken'];
     return localGet_Promise('radarRefreshToken');
   })
   .then( (items) => {
-    refreshToken = (typeof items['radarRefreshToken'] == 'undefined') ? true : items['radarRefreshToken'];
+    refreshToken = (typeof items['radarRefreshToken'] == 'undefined') ? null : items['radarRefreshToken'];
   })
 }
 
