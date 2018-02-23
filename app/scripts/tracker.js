@@ -100,10 +100,11 @@ function FindCharacter() {
     })
   })
   .then( (response) => {
-    var region = response.data['name'].replace(/ /gi, '_');
+    region = response.data['name'].replace(/ /gi, '_');
     reactiveData.characterLocation = systemName+', '+region;
-    if (location.href.split('#')[0] != 'http://evemaps.dotlan.net/map/'+region+'/'+systemName) {
-      window.location.href = 'http://evemaps.dotlan.net/map/'+region+'/'+systemName
+    if (location.pathname.split('#')[0] != '/map/'+region+'/'+systemName &&
+        location.pathname.split(':')[0] != '/map/'+region+'/'+systemName) {
+      ChangePage(region, systemName);
     }
   })
   .catch( error => {
@@ -138,6 +139,19 @@ function FindCharacter() {
     }
     console.log(error);
   });
+}
+
+function ChangePage(region, systemName) {
+  var i = 1;
+  var waypointArray = window.location.pathname.split('#')[0].split(':');
+  if (systemName == waypointArray[1]) {
+    i += 1;
+  }
+  var waypointString = '';
+  for (; i < waypointArray.length; i++) {
+    waypointString += ':' + waypointArray[i];
+  }
+  location.href = 'http://evemaps.dotlan.net/map/'+region+'/'+systemName+waypointString;
 }
 
 /*
@@ -301,6 +315,7 @@ var token = null;
 var refreshToken = null;
 var radarTrackingEnabled = true;
 var systemName = null;
+var region = null;
 var characterLocation = null;
 var characterID = null;
 var characterHeartbeat = null;
@@ -338,4 +353,3 @@ ExtractAuthCode(location.href)
 .then ( () => {
   characterHeartbeat = setInterval(FindCharacter, 1000);
 });
-
