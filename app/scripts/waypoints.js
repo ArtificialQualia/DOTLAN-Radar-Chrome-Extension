@@ -157,13 +157,11 @@ function handleMutation(records) {
     return;
   }
   for (record in records) {
-    if (typeof records[record].addedNodes[0] == 'undefined'){
-      return;
-    }
-    if (records[record].addedNodes[0].id == 'dot-contextmenu'){
+    if (typeof records[record].addedNodes[0] != 'undefined' &&
+        records[record].addedNodes[0].id == 'dot-contextmenu'){
       addRadarMenuOptions(records[record].addedNodes[0]);
     }
   }
 }
 
-new MutationObserver(handleMutation).observe(document.documentElement, {childList: true, subtree: true});
+new MutationObserver(handleMutation).observe(document.documentElement, {childList: true, attributes: true, subtree: true});
