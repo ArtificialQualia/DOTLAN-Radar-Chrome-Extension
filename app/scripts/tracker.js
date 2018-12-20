@@ -7,7 +7,7 @@
 function GetCharacterID() {
   return axios({
     method: 'get',
-    url: 'https://esi.tech.ccp.is/verify/?token='+token
+    url: 'https://esi.evetech.net/verify/?token='+token
   })
   .then( (response) => {
     characterID = response.data['CharacterID'];
@@ -75,7 +75,7 @@ function FindCharacter() {
   .then( () => {
     return axios({
       method: 'get',
-      url: 'https://esi.tech.ccp.is/latest/characters/'+characterID+'/location/?token='+token
+      url: 'https://esi.evetech.net/latest/characters/'+characterID+'/location/?token='+token
     })
   })
   .then( (response) => {
@@ -83,20 +83,20 @@ function FindCharacter() {
     characterLocation = response.data['solar_system_id'];
     return axios({
       method: 'get',
-      url: 'https://esi.tech.ccp.is/latest/universe/systems/'+response.data['solar_system_id']+'/'
+      url: 'https://esi.evetech.net/latest/universe/systems/'+response.data['solar_system_id']+'/'
     })
   })
   .then( (response) => {
     systemName = response.data['name'].replace(/ /gi, '_');
     return axios({
       method: 'get',
-      url: 'https://esi.tech.ccp.is/latest/universe/constellations/'+response.data['constellation_id']+'/'
+      url: 'https://esi.evetech.net/latest/universe/constellations/'+response.data['constellation_id']+'/'
     })
   })
   .then( (response) => {
     return axios({
       method: 'get',
-      url: 'https://esi.tech.ccp.is/latest/universe/regions/'+response.data['region_id']+'/'
+      url: 'https://esi.evetech.net/latest/universe/regions/'+response.data['region_id']+'/'
     })
   })
   .then( (response) => {

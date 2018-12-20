@@ -33,7 +33,7 @@
     "activeTab",
     "storage",
     "tabs",
-    "https://esi.tech.ccp.is/*",
+    "https://esi.evetech.net/*",
     "https://login.eveonline.com/oauth/*",
     "*://evemaps.dotlan.net/*"
   ]
