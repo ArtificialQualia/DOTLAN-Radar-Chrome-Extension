@@ -160,24 +160,19 @@ function ChangePage(region, systemName) {
 function ExtractAuthCode(url) {
   if(url.indexOf('#?code=') > -1) {
     var code = url.split('#?code=')[1];
-    return axios({
-      method: 'post',
-      url: 'https://login.eveonline.com/oauth/token',
-      headers: {
-        Authorization: atob("QmFzaWMgTVRRNE1qY3lNRFprWkRCbE5HTTFaRGd3TmpCa016Vmxaall6WWpsbFpXTTZhekU0YmtKNU5uVmhhMHB5UjB0dlIxaENVRkoxY2paak4yNUlUMUp4TkdFelpVNTRZalZ0T0E9PQ==")
-      },
-      data: 'grant_type=authorization_code&code='+code
-    })
-    .then( (response) => {
-      token = response.data['access_token'];
-      refreshToken = response.data['refresh_token'];
-      chrome.storage.local.set({radarToken: token});
-      chrome.storage.local.set({radarRefreshToken: refreshToken});
-      chrome.storage.local.set({radarTrackingEnabled: true});
-    })
-    .catch( (error) => {
-      console.log(error);
-    })
+    return new Promise((resolve, reject) => {
+      chrome.runtime.sendMessage(
+        {contentScriptQuery: "postAuthCode", code: code},
+        response => {
+          token = response.data['access_token'];
+          refreshToken = response.data['refresh_token'];
+          chrome.storage.local.set({radarToken: token});
+          chrome.storage.local.set({radarRefreshToken: refreshToken});
+          chrome.storage.local.set({radarTrackingEnabled: true});
+          resolve();
+        }
+      );
+    });
   }
   else {
     return Promise.resolve();
@@ -188,24 +183,21 @@ function ExtractAuthCode(url) {
  * This function tries to get a new token, if it fails all tokens that we have are revoked.
  */
 function AttemptRefreshToken(tokenArg) {
-  return axios({
-    method: 'post',
-    url: 'https://login.eveonline.com/oauth/token',
-    headers: {
-      Authorization: atob("QmFzaWMgTVRRNE1qY3lNRFprWkRCbE5HTTFaRGd3TmpCa016Vmxaall6WWpsbFpXTTZhekU0YmtKNU5uVmhhMHB5UjB0dlIxaENVRkoxY2paak4yNUlUMUp4TkdFelpVNTRZalZ0T0E9PQ==")
-    },
-    data: 'grant_type=refresh_token&refresh_token='+tokenArg
-  })
-  .then( (response) => {
-    token = response.data['access_token'];
-    refreshToken = response.data['refresh_token'];
-    chrome.storage.local.set({radarToken: token});
-    chrome.storage.local.set({radarRefreshToken: refreshToken});
-  })
-  .catch( (error) => {
-    console.log(error);
-    return RevokeToken();
-  })
+  return new Promise((resolve, reject) => {
+    chrome.runtime.sendMessage(
+      {contentScriptQuery: "refreshToken", tokenArg: tokenArg},
+      response => {
+        if (response == false) {
+          return RevokeToken();
+        }
+        token = response.data['access_token'];
+        refreshToken = response.data['refresh_token'];
+        chrome.storage.local.set({radarToken: token});
+        chrome.storage.local.set({radarRefreshToken: refreshToken});
+        resolve();
+      }
+    );
+  });
 }
 
 /*
@@ -215,37 +207,16 @@ function AttemptRefreshToken(tokenArg) {
  * We don't wait for the promises to resolve for this function
  */
 function RevokeToken() {
-  axios({
-    method: 'post',
-    url: 'https://login.eveonline.com/oauth/revoke',
-    headers: {
-      Authorization: atob("QmFzaWMgTVRRNE1qY3lNRFprWkRCbE5HTTFaRGd3TmpCa016Vmxaall6WWpsbFpXTTZhekU0YmtKNU5uVmhhMHB5UjB0dlIxaENVRkoxY2paak4yNUlUMUp4TkdFelpVNTRZalZ0T0E9PQ==")
-    },
-    data: 'token_type_hint=access_token&token='+token
-  })
-  .catch( (error) => {
-    console.log(error);
-  })
-  .then( (response) => {
-    token = null;
-    chrome.storage.local.set({radarToken: token});
-  });
-  axios({
-    method: 'post',
-    url: 'https://login.eveonline.com/oauth/revoke',
-    headers: {
-      Authorization: atob("QmFzaWMgTVRRNE1qY3lNRFprWkRCbE5HTTFaRGd3TmpCa016Vmxaall6WWpsbFpXTTZhekU0YmtKNU5uVmhhMHB5UjB0dlIxaENVRkoxY2paak4yNUlUMUp4TkdFelpVNTRZalZ0T0E9PQ==")
-    },
-    data: 'token_type_hint=refresh_token&token=='+refreshToken
-  })
-  .catch( (error) => {
-    console.log(error);
-  })
-  .then( (response) => {
-    refreshToken = null;
-    chrome.storage.local.set({radarRefreshToken: refreshToken});
-    chrome.storage.local.set({radarTrackingEnabled: true});
-  });
+  chrome.runtime.sendMessage(
+    {contentScriptQuery: "revokeToken", token: token, refreshToken: refreshToken},
+    response => {
+      token = null;
+      chrome.storage.local.set({radarToken: token});
+      refreshToken = null;
+      chrome.storage.local.set({radarRefreshToken: refreshToken});
+      chrome.storage.local.set({radarTrackingEnabled: true});
+    }
+  );
   SetLogoutStateTopbar();
 }
 

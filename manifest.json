@@ -2,7 +2,7 @@
   "manifest_version": 2,
   
   "name": "DOTLAN ESI Radar",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "This extension reimplements the old 'radar' (location tracking) feature into DOTLAN using EVE's new ESI API.",
   
   "icons": {
@@ -13,6 +13,14 @@
   },
   
   "web_accessible_resources": ["images/icon16.png"],
+  
+  "background": {
+    "scripts": [
+      "app/scripts/libraries/axios.min.js",
+      "app/scripts/background_api.js"
+    ],
+    "persistent": false
+  },
   
   "content_scripts": [
     {
