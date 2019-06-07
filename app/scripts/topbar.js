@@ -24,6 +24,17 @@ var reactiveData = {
     trackingTriggerFunction: ''
 }
 
+var backgroundColor = 'background: #D5DF3D';
+var linkDark = '';
+
+var styles = document.querySelector('head').querySelectorAll('link');
+for (i in styles) {
+  if (styles[i].href && (styles[i].href.includes('dark.css') || styles[i].href.includes('igb.css'))) {
+    backgroundColor = 'background: #333';
+    linkDark = 'Dark';
+  }
+}
+
 /*
  * These are all the HTML elements of the top bar.
  * 
@@ -49,7 +60,8 @@ var vm = new Vue({
     }, [
       createElement('div', {
         attrs: {
-          id: 'radarTopbar'
+          id: 'radarTopbar',
+          style: backgroundColor
         }
       }, [
         createElement('table', {
@@ -94,7 +106,7 @@ var vm = new Vue({
               }, ' '+reactiveData.notifierData+' '),
               createElement('a', {
                 attrs: {
-                  id: 'radarTrackingButton',
+                  id: 'radarTrackingButton'+linkDark,
                   href: 'javascript:;'
                 },
                 on: {
@@ -117,8 +129,8 @@ var vm = new Vue({
               }, ' Current Location: '+reactiveData.characterLocation+' | '),
               createElement('a', {
                 attrs: {
-                  href: reactiveData.signInLink,
-                  id: 'radarSignIn'
+                  id: 'radarSignIn'+linkDark,
+                  href: reactiveData.signInLink
                 },
                 on: {
                   click: reactiveData.signInOnClick

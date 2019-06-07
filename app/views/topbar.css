@@ -11,7 +11,6 @@
   width: 800px;
   border-radius: 0px 0px 25px 25px;
   padding: 1px 15px 5px 10px;
-  background: #D5DF3D;
   height: 18px;
   box-shadow: 0 0 5px black;
 }
@@ -48,6 +47,19 @@
   color: #444;
 }
 
+#radarSignInDark {
+	font-weight: bold;
+  color: #bbb;
+}
+
+#radarSignInDark:hover {
+  color: #ddd;
+}
+
+#radarSignInDark:active {
+  color: #fff;
+}
+
 #radarTrackingButton {
   font-weight: bold;
   color: #8F8B2C;
@@ -59,6 +71,19 @@
 
 #radarTrackingButton:active {
   color: #444;
+}
+
+#radarTrackingButtonDark {
+  font-weight: bold;
+  color: #bbb;
+}
+
+#radarTrackingButtonDark:hover {
+  color: #ddd;
+}
+
+#radarTrackingButtonDark:active {
+  color: #fff;
 }
 
 #radarColumnLeft {
