@@ -37,9 +37,7 @@
   ],
   
   "permissions" : [
-    "activeTab",
     "storage",
-    "tabs",
     "https://esi.evetech.net/*",
     "https://login.eveonline.com/oauth/*",
     "*://evemaps.dotlan.net/*"
