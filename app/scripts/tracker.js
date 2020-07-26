@@ -151,7 +151,7 @@ function ChangePage(region, systemName) {
   for (; i < waypointArray.length; i++) {
     waypointString += ':' + waypointArray[i];
   }
-  location.href = 'http://evemaps.dotlan.net/map/'+region+'/'+systemName+waypointString;
+  location.href = 'http://evemaps.dotlan.net/map/'+region+'/'+systemName+waypointString+'#?tracking';
 }
 
 /*
@@ -168,15 +168,16 @@ function ExtractAuthCode(url) {
           refreshToken = response.data['refresh_token'];
           chrome.storage.local.set({radarToken: token});
           chrome.storage.local.set({radarRefreshToken: refreshToken});
-          chrome.storage.local.set({radarTrackingEnabled: true});
+          radarTrackingEnabled = true;
           resolve();
         }
       );
     });
   }
-  else {
-    return Promise.resolve();
+  else if (url.indexOf('#?tracking') > -1) {
+    radarTrackingEnabled = true;
   }
+  return Promise.resolve();
 }
 
 /*
@@ -214,7 +215,6 @@ function RevokeToken() {
       chrome.storage.local.set({radarToken: token});
       refreshToken = null;
       chrome.storage.local.set({radarRefreshToken: refreshToken});
-      chrome.storage.local.set({radarTrackingEnabled: true});
     }
   );
   SetLogoutStateTopbar();
@@ -252,7 +252,6 @@ function radarTrackingTrigger() {
     reactiveData.topbarContainerAnimation = 'slideIn 1s ease-out 0.5s 1 forwards';
     reactiveData.topbarContainerAnimationModifier = 'slideIn 1s ease-out 0.5s 1 forwards';
     radarTrackingEnabled = false;
-    chrome.storage.local.set({radarTrackingEnabled: radarTrackingEnabled});
   }
   else {
     reactiveData.trackingTriggerText = 'Stop Tracking';
@@ -260,7 +259,6 @@ function radarTrackingTrigger() {
     reactiveData.topbarContainerAnimation = 'none';
     reactiveData.topbarContainerAnimationModifier = 'none';
     radarTrackingEnabled = true;
-    chrome.storage.local.set({radarTrackingEnabled: radarTrackingEnabled});
   }
 }
 
@@ -268,11 +266,7 @@ function radarTrackingTrigger() {
  * helper function to get the data we have stored in chrome.storage.local for working across tabs and on new pages
  */
 function syncData() {
-  return localGet_Promise('radarTrackingEnabled')
-  .then( (items) => {
-    radarTrackingEnabled = (typeof items['radarTrackingEnabled'] == 'undefined') ? true : items['radarTrackingEnabled'];
-    return localGet_Promise('radarToken');
-  })
+  return localGet_Promise('radarToken')
   .then( (items) => {
     token = (typeof items['radarToken'] == 'undefined') ? null : items['radarToken'];
     return localGet_Promise('radarRefreshToken');
@@ -284,7 +278,7 @@ function syncData() {
 
 var token = null;
 var refreshToken = null;
-var radarTrackingEnabled = true;
+var radarTrackingEnabled = false;
 var systemName = null;
 var region = null;
 var characterLocation = null;

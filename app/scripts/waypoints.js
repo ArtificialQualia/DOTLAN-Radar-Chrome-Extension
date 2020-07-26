@@ -32,7 +32,7 @@ function addWaypoint(location, asDestination) {
           waypointString = waypointString.substr(waypointString.substr(1).indexOf(':') + 1);
         }
       }
-      window.location.assign('http://evemaps.dotlan.net/map/'+region+'/'+systemName+waypointString);
+      window.location.assign('http://evemaps.dotlan.net/map/'+region+'/'+systemName+waypointString+'#?tracking');
     }
   })
   .catch( (error) => {
@@ -52,7 +52,7 @@ function removeWaypoint(location) {
       waypointString += ':'+waypointArray[i];
     }
   }
-  window.location.assign('http://evemaps.dotlan.net/map/'+region+'/'+systemName+waypointString);
+  window.location.assign('http://evemaps.dotlan.net/map/'+region+'/'+systemName+waypointString+'#?tracking');
 }
 
 /*
