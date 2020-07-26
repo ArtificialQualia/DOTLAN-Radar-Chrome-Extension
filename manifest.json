@@ -37,7 +37,6 @@
   ],
   
   "permissions" : [
-    "declarativeContent",
     "activeTab",
     "storage",
     "tabs",
