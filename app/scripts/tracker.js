@@ -144,6 +144,7 @@ function FindCharacter() {
 function ChangePage(region, systemName) {
   var i = 1;
   var waypointArray = window.location.pathname.split('#')[0].split(':');
+  var hash = window.location.hash;
   if (systemName == waypointArray[1]) {
     i += 1;
   }
@@ -151,7 +152,7 @@ function ChangePage(region, systemName) {
   for (; i < waypointArray.length; i++) {
     waypointString += ':' + waypointArray[i];
   }
-  location.href = 'http://evemaps.dotlan.net/map/'+region+'/'+systemName+waypointString+'#?tracking';
+  location.href = 'http://evemaps.dotlan.net/map/'+region+'/'+systemName+waypointString+'?tracking'+hash;
 }
 
 /*
@@ -169,12 +170,13 @@ function ExtractAuthCode(url) {
           chrome.storage.local.set({radarToken: token});
           chrome.storage.local.set({radarRefreshToken: refreshToken});
           radarTrackingEnabled = true;
+          window.location.hash = '';
           resolve();
         }
       );
     });
   }
-  else if (url.indexOf('#?tracking') > -1) {
+  else if (url.indexOf('?tracking') > -1) {
     radarTrackingEnabled = true;
   }
   return Promise.resolve();
