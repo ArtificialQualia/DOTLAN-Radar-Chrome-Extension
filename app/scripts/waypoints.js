@@ -3,13 +3,15 @@
  */
 function addWaypoint(location, asDestination) {
   axios({
-    method: 'get',
-    url: 'https://esi.evetech.net/latest/search/?categories=solar_system&search='+location
-  })
+    method: 'post',
+    url: 'https://esi.evetech.net/latest/universe/ids/?language=en',
+    data: '["' + location + '"]'
+  },
+  )
   .then( (response) => {
     return axios({
       method: 'post',
-      url: 'https://esi.evetech.net/latest/ui/autopilot/waypoint/?add_to_beginning=false&clear_other_waypoints='+asDestination+'&destination_id='+response.data['solar_system'][0]+'&token='+token
+      url: 'https://esi.evetech.net/latest/ui/autopilot/waypoint/?language=en&add_to_beginning=false&clear_other_waypoints='+asDestination+'&destination_id='+response.data['systems'][0]['id']+'&token='+token
     })
   })
   .then( () => {
@@ -66,7 +68,7 @@ function addRadarMenuOptions(menu) {
   var clickLocation = clickRedirectArray[clickRedirectArray.length - 1];
   axios({
     method: 'get',
-    url: 'https://esi.evetech.net/latest/universe/systems/'+clickLocation+'/'
+    url: 'https://esi.evetech.net/latest/universe/systems/'+clickLocation+'/?language=en'
   }) 
   .then( (response) => {
     clickLocation = response.data['name'];

@@ -75,7 +75,7 @@ function FindCharacter() {
   .then( () => {
     return axios({
       method: 'get',
-      url: 'https://esi.evetech.net/latest/characters/'+characterID+'/location/?token='+token
+      url: 'https://esi.evetech.net/latest/characters/'+characterID+'/location/?language=en&token='+token
     })
   })
   .then( (response) => {
@@ -83,20 +83,20 @@ function FindCharacter() {
     characterLocation = response.data['solar_system_id'];
     return axios({
       method: 'get',
-      url: 'https://esi.evetech.net/latest/universe/systems/'+response.data['solar_system_id']+'/'
+      url: 'https://esi.evetech.net/latest/universe/systems/'+response.data['solar_system_id']+'/?language=en'
     })
   })
   .then( (response) => {
     systemName = response.data['name'].replace(/ /gi, '_');
     return axios({
       method: 'get',
-      url: 'https://esi.evetech.net/latest/universe/constellations/'+response.data['constellation_id']+'/'
+      url: 'https://esi.evetech.net/latest/universe/constellations/'+response.data['constellation_id']+'/?language=en'
     })
   })
   .then( (response) => {
     return axios({
       method: 'get',
-      url: 'https://esi.evetech.net/latest/universe/regions/'+response.data['region_id']+'/'
+      url: 'https://esi.evetech.net/latest/universe/regions/'+response.data['region_id']+'/?language=en'
     })
   })
   .then( (response) => {
@@ -165,8 +165,8 @@ function ExtractAuthCode(url) {
       chrome.runtime.sendMessage(
         {contentScriptQuery: "postAuthCode", code: code},
         response => {
-          token = response.data['access_token'];
-          refreshToken = response.data['refresh_token'];
+          token = response['access_token'];
+          refreshToken = response['refresh_token'];
           chrome.storage.local.set({radarToken: token});
           chrome.storage.local.set({radarRefreshToken: refreshToken});
           radarTrackingEnabled = true;
@@ -193,8 +193,8 @@ function AttemptRefreshToken(tokenArg) {
         if (response == false) {
           return RevokeToken();
         }
-        token = response.data['access_token'];
-        refreshToken = response.data['refresh_token'];
+        token = response['access_token'];
+        refreshToken = response['refresh_token'];
         chrome.storage.local.set({radarToken: token});
         chrome.storage.local.set({radarRefreshToken: refreshToken});
         resolve();
