@@ -5,13 +5,20 @@
  * if it's bad, we try to refresh the token (if refresh fails, refreshToken is set to null)
  */
 function GetCharacterID() {
-  return axios({
-    method: 'get',
-    url: 'https://esi.evetech.net/verify/?token='+token
-  })
-  .then( (response) => {
-    characterID = response.data['CharacterID'];
-    reactiveData.characterName = response.data['CharacterName'];
+  return Promise.resolve().then( () => {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    response = JSON.parse(jsonPayload);
+    if (typeof response['name'] == 'undefined' || typeof response['sub'] == 'undefined') {
+      throw "bad token"
+    }
+
+    characterID = response.sub.split(':')[2];
+    reactiveData.characterName = response.name;
     reactiveData.charLocationDisplay = '';
     reactiveData.notifierDisplay = '';
     reactiveData.topbarContainerAnimation = 'none';
@@ -159,8 +166,8 @@ function ChangePage(region, systemName) {
  * This tries to extract the auth code from the URL, this only happens when we get a redirect from the login server
  */
 function ExtractAuthCode(url) {
-  if(url.indexOf('#?code=') > -1) {
-    var code = url.split('#?code=')[1];
+  if(url.indexOf('?code=') > -1) {
+    var code = url.split('?code=')[1].split('&state')[0];
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage(
         {contentScriptQuery: "postAuthCode", code: code},

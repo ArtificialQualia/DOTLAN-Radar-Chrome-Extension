@@ -2,7 +2,7 @@
   "manifest_version": 3,
   
   "name": "DOTLAN ESI Radar",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "This extension reimplements the old 'radar' (location tracking) feature into DOTLAN using EVE's new ESI API.",
   
   "icons": {
@@ -41,7 +41,7 @@
 
   "host_permissions": [
     "https://esi.evetech.net/*",
-    "https://login.eveonline.com/oauth/*",
+    "https://login.eveonline.com/v2/oauth/*",
     "*://evemaps.dotlan.net/*"
   ]
   

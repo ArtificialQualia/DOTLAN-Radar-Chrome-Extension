@@ -2,7 +2,7 @@
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.contentScriptQuery == "postAuthCode"){
-      fetch('https://login.eveonline.com/oauth/token', {
+      fetch('https://login.eveonline.com/v2/oauth/token', {
         method: 'post',
         headers: {
           Authorization: atob("QmFzaWMgTVRRNE1qY3lNRFprWkRCbE5HTTFaRGd3TmpCa016Vmxaall6WWpsbFpXTTZhekU0YmtKNU5uVmhhMHB5UjB0dlIxaENVRkoxY2paak4yNUlUMUp4TkdFelpVNTRZalZ0T0E9PQ=="),
@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener(
       return true;
     }
     else if (request.contentScriptQuery == "refreshToken"){
-      fetch('https://login.eveonline.com/oauth/token', {
+      fetch('https://login.eveonline.com/v2/oauth/token', {
         method: 'post',
         headers: {
           Authorization: atob("QmFzaWMgTVRRNE1qY3lNRFprWkRCbE5HTTFaRGd3TmpCa016Vmxaall6WWpsbFpXTTZhekU0YmtKNU5uVmhhMHB5UjB0dlIxaENVRkoxY2paak4yNUlUMUp4TkdFelpVNTRZalZ0T0E9PQ=="),
@@ -39,7 +39,7 @@ chrome.runtime.onMessage.addListener(
       return true;
     }
     else if (request.contentScriptQuery == "revokeToken") {
-      fetch('https://login.eveonline.com/oauth/revoke', {
+      fetch('https://login.eveonline.com/v2/oauth/revoke', {
         method: 'post',
         headers: {
           Authorization: atob("QmFzaWMgTVRRNE1qY3lNRFprWkRCbE5HTTFaRGd3TmpCa016Vmxaall6WWpsbFpXTTZhekU0YmtKNU5uVmhhMHB5UjB0dlIxaENVRkoxY2paak4yNUlUMUp4TkdFelpVNTRZalZ0T0E9PQ=="),
@@ -51,7 +51,7 @@ chrome.runtime.onMessage.addListener(
         console.log(error);
       })
       .then( (response) => {
-        fetch('https://login.eveonline.com/oauth/revoke', {
+        fetch('https://login.eveonline.com/v2/oauth/revoke', {
           method: 'post',
           headers: {
             Authorization: atob("QmFzaWMgTVRRNE1qY3lNRFprWkRCbE5HTTFaRGd3TmpCa016Vmxaall6WWpsbFpXTTZhekU0YmtKNU5uVmhhMHB5UjB0dlIxaENVRkoxY2paak4yNUlUMUp4TkdFelpVNTRZalZ0T0E9PQ=="),
